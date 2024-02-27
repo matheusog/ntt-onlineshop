@@ -1,0 +1,37 @@
+managed implementation in class zbp_i_online_shop_mog unique;
+strict (2);
+define behavior for ZI_ONLINE_SHOP_MOG alias Online_Shop
+persistent table zonlineshop_mog
+with additional save
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  field ( numbering : managed, readonly ) OrderUuid;
+  field ( mandatory ) OrderedItem;
+  field ( readonly ) CreationDate, OrderId;
+  determination calculate_order_id on modify { create; }
+  internal action create_pr parameter ZI_ONLINE_SHOP_ABS_BRMOG;
+  internal action set_inforecord;
+  internal action update_inforecord;
+  create;
+  update;
+  delete;
+
+  mapping for zonlineshop_mog {
+    OrderUuid       = order_uuid;
+    OrderId         = order_id;
+    OrderedItem     = ordereditem;
+    DeliveryDate    = deliverydate;
+    CreationDate    = creationdate;
+    PackageId       = pkgid;
+  }
+
+//  mapping for zshop_as_brmog {
+//    OrderUuid                   = order_uuid;
+////    PurchaseRequisitionNumber   = purchasereqn;
+////    PurchaseInfoRecord          = purinforecord;
+////    PuchaseOrder                = purorder;
+//    CostCenter                  = costcenter;
+//  }
+}
